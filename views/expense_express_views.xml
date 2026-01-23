@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ============================================================ -->
+    <!-- EXPENSE CATEGORY VIEWS -->
+    <!-- ============================================================ -->
+
+    <record id="view_expense_category_list" model="ir.ui.view">
+        <field name="name">expense.category.list</field>
+        <field name="model">expense.category</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="account_id"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_expense_category_form" model="ir.ui.view">
+        <field name="name">expense.category.form</field>
+        <field name="model">expense.category</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="code"/>
+                        </group>
+                        <group>
+                            <field name="account_id"/>
+                            <field name="sequence"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- ============================================================ -->
+    <!-- EXPENSE EXPRESS VIEWS -->
+    <!-- ============================================================ -->
+
+    <!-- Simple Form View -->
+    <record id="view_expense_express_form" model="ir.ui.view">
+        <field name="name">expense.express.form</field>
+        <field name="model">expense.express</field>
+        <field name="arch" type="xml">
+            <form string="Expense">
+                <header>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_move" type="object"
+                                class="oe_stat_button" icon="fa-book"
+                                invisible="not move_id">
+                            <span>Journal Entry</span>
+                        </button>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name" placeholder="e.g. Vegetables from market"/>
+                            <field name="amount"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="category_id"/>
+                            <field name="date"/>
+                            <field name="journal_id" options="{'no_create': True}"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="notes" placeholder="Optional notes..."/>
+                    </group>
+                    <field name="company_id" invisible="1"/>
+                    <field name="move_id" invisible="1"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- List View -->
+    <record id="view_expense_express_list" model="ir.ui.view">
+        <field name="name">expense.express.list</field>
+        <field name="model">expense.express</field>
+        <field name="arch" type="xml">
+            <list default_order="date desc">
+                <field name="date"/>
+                <field name="name"/>
+                <field name="category_id"/>
+                <field name="amount" sum="Total"/>
+                <field name="currency_id" column_invisible="True"/>
+                <field name="state" widget="badge" decoration-success="state == 'posted'"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Kanban View -->
+    <record id="view_expense_express_kanban" model="ir.ui.view">
+        <field name="name">expense.express.kanban</field>
+        <field name="model">expense.express</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_mobile">
+                <templates>
+                    <t t-name="card">
+                        <div class="d-flex justify-content-between mb-2">
+                            <strong><field name="name"/></strong>
+                            <strong class="text-primary"><field name="amount" widget="monetary"/></strong>
+                        </div>
+                        <div class="text-muted">
+                            <field name="date"/> - <field name="category_id"/>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="view_expense_express_search" model="ir.ui.view">
+        <field name="name">expense.express.search</field>
+        <field name="model">expense.express</field>
+        <field name="arch" type="xml">
+            <search string="Search Expenses">
+                <field name="name"/>
+                <field name="category_id"/>
+                <separator/>
+                <filter name="filter_this_month" string="This Month"
+                        domain="[('date', '&gt;=', (context_today() - relativedelta(day=1)).strftime('%Y-%m-%d'))]"/>
+                <filter name="filter_last_month" string="Last Month"
+                        domain="[('date', '&gt;=', (context_today() - relativedelta(months=1, day=1)).strftime('%Y-%m-%d')),
+                                 ('date', '&lt;', (context_today() - relativedelta(day=1)).strftime('%Y-%m-%d'))]"/>
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter name="group_category" string="Category" context="{'group_by': 'category_id'}"/>
+                    <filter name="group_date" string="Date" context="{'group_by': 'date:month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+</odoo>

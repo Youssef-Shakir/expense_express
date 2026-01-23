@@ -1,0 +1,49 @@
+/* Express Expense - Custom Styles */
+
+/* Quick expense form styling */
+.o_form_view .o_expense_express_amount {
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+/* Category card styling in kanban */
+.o_expense_category_card {
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.o_expense_category_card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Receipt upload area */
+.o_expense_receipt_upload {
+    border: 2px dashed #dee2e6;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    transition: border-color 0.2s;
+}
+
+.o_expense_receipt_upload:hover {
+    border-color: #7c3aed;
+}
+
+/* Expense kanban cards */
+.o_kanban_view .o_kanban_record .o_expense_amount {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #7c3aed;
+}
+
+/* Mobile optimizations */
+@media (max-width: 767px) {
+    .o_expense_express_form .o_group {
+        flex-direction: column;
+    }
+
+    .o_expense_express_form .o_inner_group {
+        width: 100%;
+    }
+}

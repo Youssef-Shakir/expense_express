@@ -1,0 +1,187 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# * expense_express
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 18.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-01-01 00:00+0000\n"
+"PO-Revision-Date: 2024-01-01 00:00+0000\n"
+"Last-Translator: Yousif Shakir\n"
+"Language-Team: Arabic\n"
+"Language: ar\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
+
+#. module: expense_express
+#: model:ir.model,name:expense_express.model_expense_express
+msgid "Expense"
+msgstr "مصروف"
+
+#. module: expense_express
+#: model:ir.model,name:expense_express.model_expense_category
+msgid "Expense Category"
+msgstr "تصنيف المصروفات"
+
+#. module: expense_express
+#: model:ir.ui.menu,name:expense_express.menu_expense_express_root
+msgid "Expenses Press"
+msgstr "سجل المصروفات"
+
+#. module: expense_express
+#: model:ir.ui.menu,name:expense_express.menu_expense_express_all
+msgid "All Expenses"
+msgstr "جميع المصروفات"
+
+#. module: expense_express
+#: model:ir.ui.menu,name:expense_express.menu_expense_express_config
+msgid "Configuration"
+msgstr "الإعدادات"
+
+#. module: expense_express
+#: model:ir.ui.menu,name:expense_express.menu_expense_category
+msgid "Categories"
+msgstr "التصنيفات"
+
+#. module: expense_express
+#: model:ir.actions.act_window,name:expense_express.action_expense_express
+msgid "Expenses"
+msgstr "المصروفات"
+
+#. module: expense_express
+#: model:ir.model.fields,field_description:expense_express.field_expense_express__name
+msgid "Description"
+msgstr "الوصف"
+
+#. module: expense_express
+#: model:ir.model.fields,field_description:expense_express.field_expense_express__amount
+msgid "Amount"
+msgstr "المبلغ"
+
+#. module: expense_express
+#: model:ir.model.fields,field_description:expense_express.field_expense_express__date
+msgid "Date"
+msgstr "التاريخ"
+
+#. module: expense_express
+#: model:ir.model.fields,field_description:expense_express.field_expense_express__category_id
+msgid "Category"
+msgstr "التصنيف"
+
+#. module: expense_express
+#: model:ir.model.fields,field_description:expense_express.field_expense_express__notes
+msgid "Notes"
+msgstr "ملاحظات"
+
+#. module: expense_express
+#: model:ir.model.fields,field_description:expense_express.field_expense_express__journal_id
+msgid "Journal"
+msgstr "دفتر اليومية"
+
+#. module: expense_express
+#: model:ir.model.fields,field_description:expense_express.field_expense_express__move_id
+msgid "Journal Entry"
+msgstr "قيد يومية"
+
+#. module: expense_express
+#: model:ir.model.fields,field_description:expense_express.field_expense_express__state
+msgid "Status"
+msgstr "الحالة"
+
+#. module: expense_express
+#: model:ir.model.fields,field_description:expense_express.field_expense_express__company_id
+msgid "Company"
+msgstr "الشركة"
+
+#. module: expense_express
+#: model:ir.model.fields,field_description:expense_express.field_expense_express__currency_id
+msgid "Currency"
+msgstr "العملة"
+
+#. module: expense_express
+#: model:ir.model.fields,field_description:expense_express.field_expense_category__name
+msgid "Category Name"
+msgstr "اسم التصنيف"
+
+#. module: expense_express
+#: model:ir.model.fields,field_description:expense_express.field_expense_category__code
+msgid "Code"
+msgstr "الرمز"
+
+#. module: expense_express
+#: model:ir.model.fields,field_description:expense_express.field_expense_category__account_id
+msgid "Expense Account"
+msgstr "حساب المصروفات"
+
+#. module: expense_express
+#: model:ir.model.fields,field_description:expense_express.field_expense_category__sequence
+msgid "Sequence"
+msgstr "التسلسل"
+
+#. module: expense_express
+#: model:ir.model.fields,field_description:expense_express.field_expense_category__active
+msgid "Active"
+msgstr "نشط"
+
+#. module: expense_express
+#: model_terms:ir.ui.view,arch_db:expense_express.view_expense_express_form
+msgid "e.g. Vegetables from market"
+msgstr "مثال: خضروات من السوق"
+
+#. module: expense_express
+#: model_terms:ir.ui.view,arch_db:expense_express.view_expense_express_form
+msgid "Optional notes..."
+msgstr "ملاحظات اختيارية..."
+
+#. module: expense_express
+#: model:ir.model.fields.selection,name:expense_express.selection__expense_express__state__draft
+msgid "Draft"
+msgstr "مسودة"
+
+#. module: expense_express
+#: model:ir.model.fields.selection,name:expense_express.selection__expense_express__state__posted
+msgid "Posted"
+msgstr "مرحّل"
+
+#. module: expense_express
+#: model_terms:ir.ui.view,arch_db:expense_express.view_expense_express_search
+msgid "This Month"
+msgstr "هذا الشهر"
+
+#. module: expense_express
+#: model_terms:ir.ui.view,arch_db:expense_express.view_expense_express_search
+msgid "Last Month"
+msgstr "الشهر الماضي"
+
+#. module: expense_express
+#: model_terms:ir.ui.view,arch_db:expense_express.view_expense_express_search
+msgid "Group By"
+msgstr "تجميع حسب"
+
+#. module: expense_express
+#: model_terms:ir.ui.view,arch_db:expense_express.view_expense_express_search
+msgid "Search Expenses"
+msgstr "بحث في المصروفات"
+
+#. module: expense_express
+#: model_terms:ir.actions.act_window,help:expense_express.action_expense_express
+msgid "Record your first expense!"
+msgstr "سجّل أول مصروف!"
+
+#. module: expense_express
+#: model_terms:ir.actions.act_window,help:expense_express.action_expense_express
+msgid "Click \"New\" to add an expense."
+msgstr "اضغط \"جديد\" لإضافة مصروف."
+
+#. module: expense_express
+#: code:addons/expense_express/models/expense_express.py:0
+msgid "Please set an expense account on category \"%s\""
+msgstr "الرجاء تحديد حساب مصروفات للتصنيف \"%s\""
+
+#. module: expense_express
+#: code:addons/expense_express/models/expense_express.py:0
+msgid "Please configure a default account on journal \"%s\""
+msgstr "الرجاء تحديد حساب افتراضي لدفتر اليومية \"%s\""

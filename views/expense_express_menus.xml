@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ============================================================ -->
+    <!-- ACTIONS -->
+    <!-- ============================================================ -->
+
+    <!-- All Expenses Action -->
+    <record id="action_expense_express" model="ir.actions.act_window">
+        <field name="name">Expenses</field>
+        <field name="res_model">expense.express</field>
+        <field name="view_mode">list,kanban,form</field>
+        <field name="search_view_id" ref="view_expense_express_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Record your first expense!
+            </p>
+            <p>
+                Click "New" to add an expense.
+            </p>
+        </field>
+    </record>
+
+    <!-- Expense Categories Action -->
+    <record id="action_expense_category" model="ir.actions.act_window">
+        <field name="name">Categories</field>
+        <field name="res_model">expense.category</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- ============================================================ -->
+    <!-- MENUS -->
+    <!-- ============================================================ -->
+
+    <!-- Main Application Menu -->
+    <menuitem id="menu_expense_express_root"
+              name="Expenses Press"
+              web_icon="expense_express,static/description/icon.svg"
+              sequence="45"/>
+
+    <!-- Expenses Menu -->
+    <menuitem id="menu_expense_express_all"
+              name="All Expenses"
+              parent="menu_expense_express_root"
+              action="action_expense_express"
+              sequence="10"/>
+
+    <!-- Configuration Menu -->
+    <menuitem id="menu_expense_express_config"
+              name="Configuration"
+              parent="menu_expense_express_root"
+              sequence="100"/>
+
+    <!-- Categories Menu -->
+    <menuitem id="menu_expense_category"
+              name="Categories"
+              parent="menu_expense_express_config"
+              action="action_expense_category"
+              sequence="10"/>
+
+</odoo>
