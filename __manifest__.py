@@ -47,11 +47,14 @@ Developed by Yousif Shakir | تطوير يوسف شاكر
     'depends': [
         'base',
         'account',
+        'point_of_sale',
+        'mail',
     ],
     'data': [
         'security/ir.model.access.csv',
         'views/expense_express_views.xml',
         'views/expense_express_menus.xml',
+        'views/cash_difference_views.xml',
     ],
     'assets': {
         'web.assets_backend': [

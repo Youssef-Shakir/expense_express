@@ -1,0 +1,358 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ============================================================ -->
+    <!-- SEQUENCE -->
+    <!-- ============================================================ -->
+
+    <record id="seq_cash_difference_reconciliation" model="ir.sequence">
+        <field name="name">Cash Difference Reconciliation</field>
+        <field name="code">cash.difference.reconciliation</field>
+        <field name="prefix">CDR/</field>
+        <field name="padding">4</field>
+        <field name="company_id" eval="False"/>
+    </record>
+
+    <!-- ============================================================ -->
+    <!-- VIEWS -->
+    <!-- ============================================================ -->
+
+    <!-- Dashboard View -->
+    <record id="view_cash_difference_dashboard" model="ir.ui.view">
+        <field name="name">cash.difference.reconciliation.dashboard</field>
+        <field name="model">cash.difference.reconciliation</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_dashboard o_cash_difference_dashboard" create="false" sample="1">
+                <header>
+                    <button name="action_detect_cash_differences" type="object"
+                            string="Scan for Differences" class="btn-primary"
+                            display="always"/>
+                </header>
+                <field name="name"/>
+                <field name="date"/>
+                <field name="amount"/>
+                <field name="difference_type"/>
+                <field name="category_id"/>
+                <field name="state"/>
+                <field name="currency_id"/>
+                <templates>
+                    <t t-name="card">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <strong class="fs-5"><field name="name"/></strong>
+                                        <span t-attf-class="badge fs-6 #{record.difference_type.raw_value == 'loss' ? 'text-bg-danger' : 'text-bg-success'}">
+                                            <t t-if="record.difference_type.raw_value == 'loss'">Cash Loss</t>
+                                            <t t-else="">Cash Gain</t>
+                                        </span>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span class="text-muted"><field name="date"/></span>
+                                        <span class="fs-4 fw-bold text-primary">
+                                            <field name="amount" widget="monetary"/>
+                                        </span>
+                                    </div>
+                                    <div class="mt-3 d-flex justify-content-between align-items-center">
+                                        <div t-if="record.category_id.value" class="text-muted">
+                                            <i class="fa fa-tag me-1"/> <field name="category_id"/>
+                                        </div>
+                                        <div t-else="" class="text-warning">
+                                            <i class="fa fa-exclamation-triangle me-1"/> Not classified
+                                        </div>
+                                        <field name="state" widget="label_selection"
+                                               options="{'classes': {'pending': 'warning', 'classified': 'success'}}"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- List View with Header Button -->
+    <record id="view_cash_difference_reconciliation_list" model="ir.ui.view">
+        <field name="name">cash.difference.reconciliation.list</field>
+        <field name="model">cash.difference.reconciliation</field>
+        <field name="arch" type="xml">
+            <list string="Cash Differences"
+                  decoration-danger="difference_type == 'loss' and state == 'pending'"
+                  decoration-success="difference_type == 'gain' and state == 'pending'"
+                  decoration-muted="state == 'classified'">
+                <header>
+                    <button name="action_detect_cash_differences" type="object"
+                            string="Scan for Differences" class="btn-secondary"
+                            display="always"/>
+                </header>
+                <field name="date"/>
+                <field name="name"/>
+                <field name="difference_type" widget="badge"
+                       decoration-danger="difference_type == 'loss'"
+                       decoration-success="difference_type == 'gain'"/>
+                <field name="amount" sum="Total"/>
+                <field name="original_account_id" optional="hide"/>
+                <field name="category_id"/>
+                <field name="state" widget="badge"
+                       decoration-warning="state == 'pending'"
+                       decoration-success="state == 'classified'"/>
+                <field name="currency_id" column_invisible="True"/>
+                <button name="action_classify" string="Classify" type="object"
+                        class="btn-primary"
+                        invisible="state == 'classified'"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_cash_difference_reconciliation_form" model="ir.ui.view">
+        <field name="name">cash.difference.reconciliation.form</field>
+        <field name="model">cash.difference.reconciliation</field>
+        <field name="arch" type="xml">
+            <form string="Cash Difference">
+                <header>
+                    <button name="action_classify" string="Classify" type="object"
+                            class="btn-primary"
+                            invisible="state == 'classified'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="pending,classified"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_original_move" type="object"
+                                class="oe_stat_button" icon="fa-file-text-o">
+                            <span>Original Entry</span>
+                        </button>
+                        <button name="action_view_correcting_move" type="object"
+                                class="oe_stat_button" icon="fa-exchange"
+                                invisible="state != 'classified'">
+                            <span>Correcting Entry</span>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Details">
+                            <field name="date"/>
+                            <field name="difference_type" widget="badge"
+                                   decoration-danger="difference_type == 'loss'"
+                                   decoration-success="difference_type == 'gain'"/>
+                            <field name="amount"/>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="original_account_id"/>
+                        </group>
+                        <group string="Classification">
+                            <field name="category_id"
+                                   placeholder="Select expense category..."
+                                   readonly="state == 'classified'"/>
+                            <field name="correcting_move_id" readonly="1"
+                                   invisible="not correcting_move_id"/>
+                        </group>
+                    </group>
+                    <group string="Source">
+                        <field name="original_move_id" readonly="1"/>
+                        <field name="original_move_line_id" readonly="1"/>
+                        <field name="company_id" groups="base.group_multi_company"/>
+                    </group>
+                    <group string="Notes">
+                        <field name="notes" nolabel="1" placeholder="Add notes..."/>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Kanban View -->
+    <record id="view_cash_difference_reconciliation_kanban" model="ir.ui.view">
+        <field name="name">cash.difference.reconciliation.kanban</field>
+        <field name="model">cash.difference.reconciliation</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="state" class="o_kanban_mobile" sample="1" create="false">
+                <header>
+                    <button name="action_detect_cash_differences" type="object"
+                            string="Scan for Differences" class="btn-primary"
+                            display="always"/>
+                </header>
+                <field name="name"/>
+                <field name="date"/>
+                <field name="amount"/>
+                <field name="difference_type"/>
+                <field name="category_id"/>
+                <field name="state"/>
+                <field name="currency_id"/>
+                <templates>
+                    <t t-name="card">
+                        <div class="d-flex flex-column">
+                            <div class="d-flex justify-content-between mb-2">
+                                <strong><field name="name"/></strong>
+                                <field name="state" widget="label_selection"
+                                       options="{'classes': {'pending': 'warning', 'classified': 'success'}}"/>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <span><field name="date"/></span>
+                                <span t-attf-class="badge #{record.difference_type.raw_value == 'loss' ? 'text-bg-danger' : 'text-bg-success'}">
+                                    <t t-if="record.difference_type.raw_value == 'loss'">Cash Loss</t>
+                                    <t t-else="">Cash Gain</t>
+                                </span>
+                            </div>
+                            <div class="mt-2">
+                                <strong class="fs-5">
+                                    <field name="amount" widget="monetary"/>
+                                </strong>
+                            </div>
+                            <div t-if="record.category_id.value" class="mt-2 text-muted">
+                                <i class="fa fa-tag"/> <field name="category_id"/>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="view_cash_difference_reconciliation_search" model="ir.ui.view">
+        <field name="name">cash.difference.reconciliation.search</field>
+        <field name="model">cash.difference.reconciliation</field>
+        <field name="arch" type="xml">
+            <search string="Cash Differences">
+                <field name="name"/>
+                <field name="category_id"/>
+                <field name="original_move_id"/>
+                <separator/>
+                <filter string="Pending" name="pending"
+                        domain="[('state', '=', 'pending')]"/>
+                <filter string="Classified" name="classified"
+                        domain="[('state', '=', 'classified')]"/>
+                <separator/>
+                <filter string="Cash Loss" name="loss"
+                        domain="[('difference_type', '=', 'loss')]"/>
+                <filter string="Cash Gain" name="gain"
+                        domain="[('difference_type', '=', 'gain')]"/>
+                <separator/>
+                <filter string="This Month" name="this_month"
+                        domain="[('date', '&gt;=', (context_today() - relativedelta(day=1)).strftime('%Y-%m-%d')),
+                                 ('date', '&lt;=', (context_today() + relativedelta(day=31)).strftime('%Y-%m-%d'))]"/>
+                <filter string="Last Month" name="last_month"
+                        domain="[('date', '&gt;=', (context_today() - relativedelta(months=1, day=1)).strftime('%Y-%m-%d')),
+                                 ('date', '&lt;=', (context_today() - relativedelta(months=1, day=31)).strftime('%Y-%m-%d'))]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Status" name="group_state" context="{'group_by': 'state'}"/>
+                    <filter string="Type" name="group_type" context="{'group_by': 'difference_type'}"/>
+                    <filter string="Category" name="group_category" context="{'group_by': 'category_id'}"/>
+                    <filter string="Date" name="group_date" context="{'group_by': 'date:month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- ============================================================ -->
+    <!-- ACTIONS -->
+    <!-- ============================================================ -->
+
+    <!-- Dashboard Action -->
+    <record id="action_cash_difference_dashboard" model="ir.actions.act_window">
+        <field name="name">Cash Differences Dashboard</field>
+        <field name="res_model">cash.difference.reconciliation</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="view_id" ref="view_cash_difference_dashboard"/>
+        <field name="search_view_id" ref="view_cash_difference_reconciliation_search"/>
+        <field name="context">{'search_default_pending': 1, 'create': False}</field>
+        <field name="help" type="html">
+            <div class="o_view_nocontent">
+                <div class="o_nocontent_help">
+                    <p class="o_view_nocontent_smiling_face">
+                        No cash differences to process
+                    </p>
+                    <p class="mt-3">
+                        Click the <strong>"Scan for Differences"</strong> button above<br/>
+                        to detect POS cash differences from closed sessions.
+                    </p>
+                </div>
+            </div>
+        </field>
+    </record>
+
+    <!-- View definitions for dashboard action -->
+    <record id="action_cash_difference_dashboard_view_kanban" model="ir.actions.act_window.view">
+        <field name="sequence">1</field>
+        <field name="view_mode">kanban</field>
+        <field name="view_id" ref="view_cash_difference_dashboard"/>
+        <field name="act_window_id" ref="action_cash_difference_dashboard"/>
+    </record>
+
+    <record id="action_cash_difference_dashboard_view_list" model="ir.actions.act_window.view">
+        <field name="sequence">2</field>
+        <field name="view_mode">list</field>
+        <field name="view_id" ref="view_cash_difference_reconciliation_list"/>
+        <field name="act_window_id" ref="action_cash_difference_dashboard"/>
+    </record>
+
+    <!-- Main List Action -->
+    <record id="action_cash_difference_reconciliation" model="ir.actions.act_window">
+        <field name="name">Cash Differences</field>
+        <field name="res_model">cash.difference.reconciliation</field>
+        <field name="view_mode">list,kanban,form</field>
+        <field name="search_view_id" ref="view_cash_difference_reconciliation_search"/>
+        <field name="context">{'search_default_pending': 1, 'create': False}</field>
+        <field name="help" type="html">
+            <div class="o_view_nocontent">
+                <div class="o_nocontent_help">
+                    <p class="o_view_nocontent_smiling_face">
+                        No cash differences found
+                    </p>
+                    <p class="mt-3">
+                        Click the <strong>"Scan for Differences"</strong> button above<br/>
+                        to detect POS cash differences from closed sessions.
+                    </p>
+                </div>
+            </div>
+        </field>
+    </record>
+
+    <!-- Scan Action (callable from menu) -->
+    <record id="action_scan_cash_differences" model="ir.actions.server">
+        <field name="name">Scan for Differences</field>
+        <field name="model_id" ref="model_cash_difference_reconciliation"/>
+        <field name="state">code</field>
+        <field name="code">
+action = env['cash.difference.reconciliation'].action_detect_cash_differences()
+        </field>
+    </record>
+
+    <!-- ============================================================ -->
+    <!-- MENUS -->
+    <!-- ============================================================ -->
+
+    <!-- Cash Differences Parent Menu -->
+    <menuitem id="menu_cash_difference_parent"
+              name="Cash Differences"
+              parent="menu_expense_express_root"
+              sequence="20"/>
+
+    <!-- Scan for Differences - Prominent first item -->
+    <menuitem id="menu_scan_cash_differences"
+              name="Scan for Differences"
+              parent="menu_cash_difference_parent"
+              action="action_scan_cash_differences"
+              sequence="1"/>
+
+    <!-- Cash Differences Dashboard Menu -->
+    <menuitem id="menu_cash_difference_dashboard"
+              name="Dashboard"
+              parent="menu_cash_difference_parent"
+              action="action_cash_difference_dashboard"
+              sequence="10"/>
+
+    <!-- Cash Differences List (under Configuration) -->
+    <menuitem id="menu_cash_difference_list"
+              name="All Cash Differences"
+              parent="menu_expense_express_config"
+              action="action_cash_difference_reconciliation"
+              sequence="20"/>
+
+</odoo>

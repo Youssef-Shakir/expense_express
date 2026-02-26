@@ -47,3 +47,84 @@
         width: 100%;
     }
 }
+
+/* ============================================= */
+/* Cash Difference Dashboard Styles */
+/* ============================================= */
+
+/* Dashboard kanban cards */
+.o_cash_difference_dashboard .o_kanban_record {
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    margin-bottom: 12px;
+    border: 1px solid #e9ecef;
+}
+
+.o_cash_difference_dashboard .o_kanban_record:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+}
+
+/* Card content padding */
+.o_cash_difference_dashboard .o_kanban_record .container-fluid {
+    padding: 16px;
+}
+
+/* Amount styling in dashboard */
+.o_cash_difference_dashboard .text-primary {
+    color: #714B67 !important;
+}
+
+/* Badge styling */
+.o_cash_difference_dashboard .badge {
+    font-weight: 500;
+    padding: 6px 12px;
+    border-radius: 20px;
+}
+
+/* Loss badge - red */
+.o_cash_difference_dashboard .text-bg-danger {
+    background-color: #dc3545 !important;
+}
+
+/* Gain badge - green */
+.o_cash_difference_dashboard .text-bg-success {
+    background-color: #198754 !important;
+}
+
+/* Warning text for not classified */
+.o_cash_difference_dashboard .text-warning {
+    color: #fd7e14 !important;
+    font-weight: 500;
+}
+
+/* Scan button styling */
+.o_kanban_view header .btn-primary,
+.o_list_view header .btn-primary {
+    font-weight: 600;
+    padding: 8px 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(113, 75, 103, 0.3);
+}
+
+.o_kanban_view header .btn-primary:hover,
+.o_list_view header .btn-primary:hover {
+    box-shadow: 0 4px 8px rgba(113, 75, 103, 0.4);
+    transform: translateY(-1px);
+}
+
+/* Empty state styling */
+.o_view_nocontent .o_nocontent_help {
+    padding: 40px 20px;
+}
+
+.o_view_nocontent .o_nocontent_help p {
+    margin-bottom: 16px;
+}
+
+/* State badges in list view */
+.o_list_view .badge {
+    font-size: 0.85em;
+    padding: 4px 10px;
+}
